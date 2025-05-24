@@ -1,84 +1,93 @@
-# Turborepo starter
+# Grober Game
 
-This Turborepo starter is maintained by the Turborepo core team.
+一个基于Turborepo的全栈游戏项目，使用现代Web技术栈构建。
 
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## 项目结构
 
 ```
-cd my-turborepo
-pnpm build
+grober/
+├── apps/
+│   ├── frontend/          # 前端游戏应用 (Vite + React + TypeScript + Zustand + Pixi.js)
+│   └── backend/           # 后端API服务
+├── packages/
+│   ├── api/              # API接口定义和数据校验 (Zod)
+│   ├── game-models/      # 共享游戏数据模型
+│   ├── typescript-config/ # TypeScript配置
+│   └── eslint-config/    # ESLint配置
+└── ...
 ```
 
-### Develop
+## 技术栈
 
-To develop all apps and packages, run the following command:
+### 前端 (apps/frontend)
+- **Vite** - 构建工具
+- **React 18** - UI框架
+- **TypeScript** - 类型安全
+- **Zustand** - 状态管理
+- **Pixi.js** - 2D游戏渲染引擎
 
+### 后端 (apps/backend)
+- 待实现
+
+### 共享包
+- **@grober/api** - API接口定义和Zod数据校验
+- **@grober/game-models** - 游戏实体、组件、系统模型
+- **@grober/typescript-config** - 共享TypeScript配置
+- **@grober/eslint-config** - 共享ESLint配置
+
+## 开发指南
+
+### 安装依赖
+```bash
+pnpm install
 ```
-cd my-turborepo
+
+### 开发模式
+```bash
+# 启动所有应用的开发模式
 pnpm dev
+
+# 仅启动前端
+pnpm --filter frontend dev
+
+# 仅启动后端
+pnpm --filter backend dev
 ```
 
-### Remote Caching
+### 构建
+```bash
+# 构建所有包和应用
+pnpm build
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+# 构建特定应用
+pnpm --filter frontend build
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+### 代码检查
+```bash
+# 运行ESLint
+pnpm lint
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
+# 类型检查
+pnpm check-types
 ```
-npx turbo link
-```
 
-## Useful Links
+## 游戏特性
 
-Learn more about the power of Turborepo:
+- 全屏游戏体验
+- 基于Pixi.js的高性能2D渲染
+- 组件化游戏架构
+- 类型安全的前后端通信
+- 实时游戏状态管理
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+## 开发规范
+
+1. 所有共享类型定义在 `@grober/api` 和 `@grober/game-models` 包中
+2. 使用Zod进行运行时数据校验
+3. 遵循TypeScript严格模式
+4. 使用ESLint保证代码质量
+5. 组件化的游戏实体设计
+
+## 许可证
+
+MIT
