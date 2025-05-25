@@ -4,7 +4,7 @@
 
 ## 项目结构
 
-```
+``` txt
 grober/
 ├── apps/
 │   ├── frontend/          # 前端游戏应用 (Vite + React + TypeScript + Zustand + Pixi.js)
@@ -20,6 +20,7 @@ grober/
 ## 技术栈
 
 ### 前端 (apps/frontend)
+
 - **Vite** - 构建工具
 - **React 18** - UI框架
 - **TypeScript** - 类型安全
@@ -27,9 +28,11 @@ grober/
 - **Pixi.js** - 2D游戏渲染引擎
 
 ### 后端 (apps/backend)
+
 - 待实现
 
 ### 共享包
+
 - **@grober/api** - API接口定义和Zod数据校验
 - **@grober/game-models** - 游戏实体、组件、系统模型
 - **@grober/typescript-config** - 共享TypeScript配置
@@ -38,11 +41,13 @@ grober/
 ## 开发指南
 
 ### 安装依赖
+
 ```bash
 pnpm install
 ```
 
 ### 开发模式
+
 ```bash
 # 启动所有应用的开发模式
 pnpm dev
@@ -55,6 +60,7 @@ pnpm --filter backend dev
 ```
 
 ### 构建
+
 ```bash
 # 构建所有包和应用
 pnpm build
@@ -64,6 +70,7 @@ pnpm --filter frontend build
 ```
 
 ### 代码检查
+
 ```bash
 # 运行ESLint
 pnpm lint

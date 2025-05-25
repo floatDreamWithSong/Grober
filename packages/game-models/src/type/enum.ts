@@ -6,6 +6,6 @@ export const CardType = z.enum([
   "Support", // 支援
   "Buff", // 增益
   "Exhaust", // 消耗
-  "Special" // 特殊
+  "Special", // 特殊
 ]);
-export type CardType = z.infer<typeof CardType>
+export type CardType = z.infer<typeof CardType>;

@@ -39,14 +39,14 @@ export interface Player extends Hero, HeroStatus {
   ApplyEffect(effect: Effect): void;
   RemoveEffect(effect: Effect): void;
   // 生命周期相关
-  onCreated?:(callback: PlayerCallback)=> void;
-  onDestory?:(callback: PlayerCallback)=> void;
+  onCreated?: (callback: PlayerCallback) => void;
+  onDestory?: (callback: PlayerCallback) => void;
 }
 
 export interface TurnBasedPlayer extends Player {
   // 回合制生命周期特有的钩子
-  beforeTurnStart?:(callback: PlayerCallback)=> void;
-  afterTurnStart?:(callback: PlayerCallback)=> void;
-  beforeTurnEnd?:(callback: PlayerCallback)=> void;
-  afterTurnEnd?:(callback: PlayerCallback)=> void;
+  beforeTurnStart?: (callback: PlayerCallback) => void;
+  afterTurnStart?: (callback: PlayerCallback) => void;
+  beforeTurnEnd?: (callback: PlayerCallback) => void;
+  afterTurnEnd?: (callback: PlayerCallback) => void;
 }
