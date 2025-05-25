@@ -1,7 +1,7 @@
 import { PipeTransform, Injectable, ArgumentMetadata, BadRequestException } from '@nestjs/common';
 import { ZodSchema } from 'zod';
 import { emailSchema } from '@grober/api';
-import { RegisterSchema, LoginSchema } from '../../../../../packages/api/src/schemas';
+import { RegisterSchema, LoginSchema } from '@grober/api';
 
 @Injectable()
 export class ZodPipe<T> implements PipeTransform {

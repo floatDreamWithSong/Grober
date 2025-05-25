@@ -5,7 +5,7 @@ export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 export interface ApiEndpoint {
   path: string;
   description?: string;
-  sub?: Record<
+  sub: Record<
     string,
     {
       method: HttpMethod;

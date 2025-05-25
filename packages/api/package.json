@@ -2,12 +2,12 @@
   "name": "@grober/api",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "eslint .",
     "fix": "eslint . --fix",
     "check-types": "tsc --noEmit"
@@ -19,12 +19,14 @@
     "@grober/eslint-config": "workspace:*",
     "@grober/typescript-config": "workspace:*",
     "eslint": "^9.15.0",
+    "tsup": "^8.5.0",
     "typescript": "~5.8.2"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
     }
   }
-} 
+}
