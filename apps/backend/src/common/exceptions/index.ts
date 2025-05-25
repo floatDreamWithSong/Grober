@@ -1,5 +1,3 @@
-import { BadRequestException } from '@nestjs/common';
-
 export class AppException extends Error {
   constructor(
     public readonly code: number,
@@ -43,27 +41,17 @@ export class ServerException extends AppException {
     }
   }
 }
-
-export class WXAuthException extends NoEffectRequestException {
+export class AuthException extends AppException {
   constructor(message: string, details?: any) {
-    super(`微信认证错误: ${message}`, true, details);
-  }
-}
-
-export class PrivateAuthException extends AppException {
-  constructor(message: string, details?: any) {
-    super(40004, `认证错误: ${message}`, details);
+    super(50001, message, details);
   }
 }
 
 export const EXCEPTIONS = {
-  WX_ILLEGAL_BUFFER: new BadRequestException('非法的buffer'),
-  WX_APPID_MISMATCH: new ServerException('appid不匹配'),
-  WX_SESSION_KEY_NOT_FOUND: new NoEffectRequestException('session_key不存在'),
-  WX_LOGIN_DATA_ERROR: new WXAuthException('登录返回数据错误：code无效'),
-  WX_ALREADY_REGISTERED: new WXAuthException('用户已被注册'),
-  VERIFY_CODE_ERROR: new PrivateAuthException('验证码错误'),
-  EMAIL_ALREADY_BOUND: new PrivateAuthException('邮箱已被绑定'),
-  EMAIL_AUTH_ERROR: new PrivateAuthException('不是被认证的邮箱类型'),
-  VERIFY_CODE_SEND_TOO_FREQUENTLY: new PrivateAuthException('验证码发送太频繁'),
+  VERIFY_CODE_ERROR: new AuthException('验证码错误'),
+  EMAIL_ALREADY_BOUND: new AuthException('邮箱已被绑定'),
+  EMAIL_AUTH_ERROR: new AuthException('不是被认证的邮箱类型'),
+  VERIFY_CODE_SEND_TOO_FREQUENTLY: new AuthException('验证码发送太频繁'),
+  USER_NOT_FOUND: new AuthException('用户不存在'),
+  WRONG_PASSWORD: new AuthException('密码错误'),
 };

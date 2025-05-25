@@ -1,15 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CosService } from '../../common/utils/cos/cos.service';
-import { PrismaService } from '../../common/utils/prisma/prisma.service';
-import { JwtPayload } from 'src/types/jwt';
 import { EmailService } from 'src/common/utils/email/email.service';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import Redis from 'ioredis';
 import { EXCEPTIONS } from 'src/common/exceptions';
 import { JwtUtils } from 'src/common/utils/jwt/jwt.service';
+import { emailSchema, Login, Register } from '@grober/api';
+import { PrismaService } from 'src/common/utils/prisma/prisma.service';
 
 @Injectable()
 export class UserService {
+
   private readonly logger = new Logger(UserService.name);
   constructor(
     private readonly cosService: CosService,
@@ -17,50 +18,18 @@ export class UserService {
     private readonly emailService: EmailService,
     private readonly jwtUtils: JwtUtils,
     @InjectRedis() private readonly redisService: Redis,
-  ) {}
-  async changeAvatar(file: Express.Multer.File, user: JwtPayload): Promise<string> {
-    const res = await this.cosService.uploadFileToGetUrl(file);
-    // 删除旧的头像
-    const _user = await this.prismaService.user.findUnique({
-      where: {
-        openId: user.openid,
-      },
-      select: {
-        avatar: true,
-      },
-    });
-    await this.prismaService.user.update({
-      where: {
-        openId: user.openid,
-      },
-      data: {
-        avatar: res,
-      },
-    });
-    if (_user?.avatar) {
-      await this.cosService.deleteFileByUrl(_user.avatar).catch(console.error);
-    }
-    return res;
-  }
+  ) { }
+
   private validateEmail(email: string) {
-    if (email === '956968770@qq.com') return true;
-    const emailRegex = /^\d{11}@stu\.ecnu\.edu\.cn$/;
-    return emailRegex.test(email);
+    return emailSchema.safeParse(email).success;
   }
-  async sendVerifyCode(email: string, openId: string): Promise<void> {
+
+  async sendVerifyCode(email: string): Promise<void> {
     // 检查邮箱格式
     if (!this.validateEmail(email)) {
       throw EXCEPTIONS.EMAIL_AUTH_ERROR;
     }
-    // 检查用户是否已经绑定邮箱
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        openId: openId,
-      },
-    });
-    if (user?.email) {
-      throw EXCEPTIONS.EMAIL_ALREADY_BOUND;
-    }
+    // 检查邮箱是否已经绑定
     let code = await this.redisService.get(email);
     if (code) {
       throw EXCEPTIONS.VERIFY_CODE_SEND_TOO_FREQUENTLY;
@@ -73,32 +42,62 @@ export class UserService {
     // 缓存验证码，有效期为 5 分钟
     await this.redisService.set(email, code, 'EX', 5 * 60);
   }
-  async verifyCode(email: string, code: string, openId: string) {
+
+  async verifyCode(body: Register) {
+    const { email, verifyCode: code, username, password } = body;
     const _code = await this.redisService.get(email);
     if (_code != code) {
       throw EXCEPTIONS.VERIFY_CODE_ERROR;
     }
     // 绑定成功，删除验证码
     await this.redisService.del(email);
-    // 更新用户邮箱
-    const user = await this.prismaService.user.update({
-      where: {
-        openId: openId,
-        userType: 0,
-      },
+    // 创建用户
+    const user = await this.prismaService.user.create({
       data: {
-        email: email,
-        userType: 1,
+        email,
+        username,
+        password,
       },
     });
+
     // 签发新的 JWT
-    const jwtToken = this.jwtUtils.sign({
-      openid: openId,
-      userType: 1,
+    return this.createJwtToken(user.userType, user.id);
+  }
+
+  async login(body: Login) {
+    const { usernameOrEmail, password } = body;
+    // 检查用户名或邮箱格式
+    const user = !this.validateEmail(usernameOrEmail)
+      ? // 如果不是邮箱格式，则认为是用户名
+      await this.prismaService.user.findUnique({
+        where: {
+          username: usernameOrEmail,
+        },
+      })
+      : // 如果是邮箱格式，则认为是邮箱
+      await this.prismaService.user.findUnique({
+        where: {
+          email: usernameOrEmail,
+        },
+      });
+
+    if (!user) {
+      throw EXCEPTIONS.USER_NOT_FOUND;
+    }
+    // 检查密码
+    if (user.password !== password) {
+      throw EXCEPTIONS.WRONG_PASSWORD;
+    }
+    // 签发新的 JWT
+    return this.createJwtToken(user.userType, user.id);
+  }
+  
+  private createJwtToken(userType: number, id: number) {
+    this.logger.log(`用户${id}登录成功, jwtToken: ${userType}`);
+    return this.jwtUtils.sign({
+      userType,
       iat: Math.floor(Date.now() / 1000),
-      uid: user.uid,
+      id,
     });
-    this.logger.log(`用户${openId}绑定邮箱成功, jwtToken: ${jwtToken}`);
-    return jwtToken;
   }
 }

@@ -4,7 +4,7 @@
 
 ## 项目结构
 
-``` txt
+```txt
 grober/
 ├── apps/
 │   ├── frontend/          # 前端游戏应用 (Vite + React + TypeScript + Zustand + Pixi.js)
