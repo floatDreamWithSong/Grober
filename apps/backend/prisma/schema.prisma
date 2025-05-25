@@ -23,7 +23,9 @@ model User {
   registerTime DateTime      @default(now()) @map("register_time")
   // 历史对局
   Game Game[]
-	@@map("Player")
+	@@map("User")
+  @@index([email], name: "idx_user_email")
+  @@index([username], name: "idx_user_username")
 }
 // 对局信息
 model Game {
