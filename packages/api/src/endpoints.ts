@@ -2,26 +2,32 @@
 export type HttpMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 // API端点定义接口
-export interface ApiEndpoint {
+interface ApiController<T extends string> {
   path: string;
   description?: string;
-  sub: Record<
-    string,
-    {
-      method: HttpMethod;
-      path: string;
-      description?: string;
-    }
-  >;
+  sub: Record<T, ApiEndpoint>;
 }
 
-// 定义所有API端点
-export const API_ENDPOINTS: Record<"AUTH" | string, ApiEndpoint> = {
+interface ApiEndpoint {
+  method: HttpMethod;
+  path: string;
+  description?: string;
+}
+
+const createApis = <T extends string>(config: Record<T,ApiEndpoint>) => {
+  return config;
+}
+
+const createController = <T extends string>(config: ApiController<T>) => {
+  return config;
+}
+
+export const API_ENDPOINTS = {
   // 认证相关端点
-  AUTH: {
-    path: "/auth",
+  AUTH: createController({
+    path:'/auth',
     description: "Authentication endpoints",
-    sub: {
+    sub: createApis({
       SEND_VERIFY_CODE: {
         method: "POST",
         path: "/sendVerifyCode",
@@ -42,8 +48,32 @@ export const API_ENDPOINTS: Record<"AUTH" | string, ApiEndpoint> = {
         path: "/logout",
         description: "User logout endpoint",
       },
-    },
-  },
-} as const;
-// 导出用于类型检查的端点名称
-export type EndpointName = keyof typeof API_ENDPOINTS;
+    }),
+  }),
+  GAME: createController({
+    path:'/game',
+    description:'Game endpoints',
+    sub:createApis({
+      LIST_ROOM:{
+        method:'GET',
+        path:'/listRoom',
+        description:'List rooms'
+      }
+    })
+  })
+};
+
+// 导出用于类型检查的控制器
+export type ControllerType = keyof typeof API_ENDPOINTS;
+
+// 导出用于类型检查的API
+export type ApiType<T extends ControllerType> = keyof (typeof API_ENDPOINTS)[T]['sub']
+
+{
+  // 测试
+  const a:ApiType<'AUTH'> = 'SEND_VERIFY_CODE'
+  // @ts-expect-error ApiType 类型不匹配
+  const b:ApiType<'AUTH'> = 'SEND_VERIFY_CODE123131'
+  // @ts-expect-error ControllerType 类型不匹配
+  const c:ControllerType = 'AUTH123123'
+}
