@@ -12,19 +12,19 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "zustand": "^5.0.1",
-    "pixi.js": "^8.4.1"
+    "react": "catalog:prod",
+    "react-dom": "catalog:prod",
+    "zustand": "catalog:prod",
+    "pixi.js": "catalog:prod"
   },
   "devDependencies": {
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.4",
-    "eslint": "^9.15.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.14",
-    "typescript": "~5.8.2",
-    "vite": "^6.0.1"
+    "@types/react": "catalog:types",
+    "@types/react-dom": "catalog:types",
+    "@vitejs/plugin-react": "catalog:build",
+    "eslint": "catalog:lint",
+    "eslint-plugin-react-hooks": "catalog:lint",
+    "eslint-plugin-react-refresh": "catalog:lint",
+    "typescript": "catalog:dev",
+    "vite": "catalog:build"
   }
 } 

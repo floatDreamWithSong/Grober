@@ -16,10 +16,10 @@
     "db:push": "pnpm -F backend prisma:db:push"
   },
   "devDependencies": {
-    "pncat": "^0.2.3",
-    "prettier": "^3.5.3",
-    "turbo": "^2.5.2",
-    "typescript": "5.8.2"
+    "pncat": "catalog:cli",
+    "prettier": "catalog:lint",
+    "turbo": "catalog:monorepo",
+    "typescript": "catalog:dev"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {

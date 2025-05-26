@@ -15,9 +15,9 @@
   "devDependencies": {
     "@grober/eslint-config": "workspace:*",
     "@grober/typescript-config": "workspace:*",
-    "eslint": "^9.15.0",
-    "tsup": "^8.5.0",
-    "typescript": "~5.8.2"
+    "eslint": "catalog:lint",
+    "tsup": "catalog:build",
+    "typescript": "catalog:dev"
   },
   "exports": {
     ".": {
@@ -27,6 +27,6 @@
     }
   },
   "dependencies": {
-    "zod": "^3.23.8"
+    "zod": "catalog:utils"
   }
 }
