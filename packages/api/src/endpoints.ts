@@ -54,11 +54,7 @@ export const API_ENDPOINTS = {
     path:'/game',
     description:'Game endpoints',
     sub:createApis({
-      LIST_ROOM:{
-        method:'GET',
-        path:'/listRoom',
-        description:'List rooms'
-      }
+
     })
   })
 };
